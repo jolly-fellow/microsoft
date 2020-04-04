@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.15)
+project(min_steps_to_make_piles_equal_height)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(min_steps_to_make_piles_equal_height main.cpp)

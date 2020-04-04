@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.15)
+project(partition_array_into_n_subsets_with_balanced_sum)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(partition_array_into_n_subsets_with_balanced_sum main.cpp)

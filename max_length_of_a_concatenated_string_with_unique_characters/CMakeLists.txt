@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.15)
+project(max_length_of_a_concatenated_string_with_unique_characters)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(max_length_of_a_concatenated_string_with_unique_characters main.cpp)

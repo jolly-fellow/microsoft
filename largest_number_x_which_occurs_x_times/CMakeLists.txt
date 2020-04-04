@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.15)
+project(largest_number_x_which_occurs_x_times)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(largest_number_x_which_occurs_x_times main.cpp)

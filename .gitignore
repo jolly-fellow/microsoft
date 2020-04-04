@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+#Clion settings
+/.idea
+/cmake-build-debug
+/cmake-build-default
+/cmake-build-release
+/cmake-build-relwithdebinfo

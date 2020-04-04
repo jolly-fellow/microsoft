@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.15)
+project(longest_substring_without_2_contiguous_occurrences_of_letter)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(longest_substring_without_2_contiguous_occurrences_of_letter main.cpp)
