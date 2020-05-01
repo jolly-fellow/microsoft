@@ -3,12 +3,21 @@
 #include <unordered_map>
 
 using namespace std;
+/*
+int dsum(int a) {
+    int s = 0;
+    while (a > 0) {
+        s += a % 10;
+        a = a / 10;
+    }
+    return s;
+}
+*/
 
 int dsum(int a) {
     int s = 0;
-    for (; a > 0; a /= 10;) {
+    for (; a > 0; a /= 10) {
         s += a % 10;
-        a /= 10;
     }
     return s;
 }
@@ -28,7 +37,6 @@ int solution(const vector<int> & A) {
     }
     return ans ? ans : -1;
 }
-
 
 int main() {
 
