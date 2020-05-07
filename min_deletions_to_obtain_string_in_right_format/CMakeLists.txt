@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 project(min_deletions_to_obtain_string_in_right_format)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 add_executable(min_deletions_to_obtain_string_in_right_format main.cpp)
