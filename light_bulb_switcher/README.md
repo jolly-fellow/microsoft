@@ -1,2 +1,4 @@
-# microsoft
-Solutions for known Microsoft online assessment tasks 
+#  Light Bulb Switcher
+
+https://leetcode.com/problems/bulb-switcher-iii/ 
+

@@ -12,6 +12,4 @@ Example 1:
     Output: true
     Explanation: left -> left -> right
 
-Related problems:
-
-    https://leetcode.com/problems/jump-game/
+    

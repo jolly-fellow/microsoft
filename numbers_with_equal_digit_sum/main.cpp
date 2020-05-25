@@ -40,9 +40,9 @@ int solution(const vector<int> & A) {
 
 int main() {
 
-    cout << "Resoult: " << solution({51, 32, 43}) << " expected -1" << endl;
-    cout << "Resoult: " << solution({42, 33, 60}) << " expected 102" << endl;
-    cout << "Resoult: " << solution({51, 71, 17, 42}) << " expected 93" << endl;
+    cout << "Result: " << solution({51, 32, 43}) << " expected -1" << endl;
+    cout << "Result: " << solution({42, 33, 60}) << " expected 102" << endl;
+    cout << "Result: " << solution({51, 71, 17, 42}) << " expected 93" << endl;
 
     return 0;
 }
