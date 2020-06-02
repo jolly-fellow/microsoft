@@ -3,28 +3,38 @@
 
 using namespace std;
 
-string solution(const string & s){
-    int n = s.size();
-    int p = 0, q = 0, mx = 0, cnt = 1, st = 0;
-    for(int i=1;i<n;i++){
-        if(s[i]==s[i-1]){
-            cnt++;
+string solution(const string &s) {
+    int s_size = s.size();
+    // start position and length of the longest sequence
+    // which doesn't contain 3 contiguous occurrences of a and b
+    int p = 0, max_length = 0;
+
+    int start = 0; // start of current processing string.
+    int count = 1; // length of current processing string.
+
+    for (int i = 1; i < s_size; i++) {
+
+        if (s[i] == s[i - 1]) {
+            // if we met two the same letters
+
+            count++;
         }
-        else{
-            cnt = 1;
+        else {
+            count = 1;
         }
-        if(cnt<=2){
-            if(i-st+1>mx){
-                mx = i-st+1;
-                p = st;
+        if (count <= 2) {
+            // "i - start + 1" is length of the current processed sequence
+            if (i - start + 1 > max_length) {
+                max_length = i - start + 1;
+                p = start;
             }
         }
-        else{
-            st = i-1;
-            cnt = 2;
+        else {
+            start = i - 1;
+            count = 2;
         }
     }
-    return s.substr(p,mx);
+    return s.substr(p, max_length);
 }
 
 int main() {

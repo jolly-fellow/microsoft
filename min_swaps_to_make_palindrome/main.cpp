@@ -4,50 +4,25 @@
 
 using namespace std;
 
+/**
+     * Algorithm:
+     *     1. First check the given string is a jumbled/shuffled palindrome or not.
+     *     2. Next have two pointers p1 at 0 and p2 at s.length - 1 and start iterating.
+     *     3. If chars at both the pointers are same then just shrink the window (increase the p1 and decrease the p2).
+     *     4. or Else
+     *          a. find the matching pair and swap the char to p2 index (increase swap count while swapping) and finally shrink the window.
+     *          b. if not found just swap once with adjacent index and increase the swap count (do not shrink the window here)
+     *     5. Print the Swap Count
+     *
+     * Time Complexity: O(n) to find Palindrome + [ O(n) for two pointer iteration * O(n) for checking and swapping ] so => O(n^2)
+     * Space Complexity: O(n)
+     *
+     */
 
-/*
-int solution(string s) {
-        int start = 0;
-        int end = s.size() - 1;
-        int ret = 0;
-        while (start < end)
-        {
-            if (s[start] != s[end])
-            {
-                int idx = end;
-                for (; idx > start; --idx)
-                {
-                    if (s[idx] == s[start])
-                    {
-                        break;
-                    }
-                }
-
-                if (idx > start)
-                {
-                    while (idx < end)
-                    {
-                        swap(s[idx], s[idx+1]);
-                        ret++;
-                        idx++;
-                    }
-                }
-                else
-                {
-                    ret = -1;
-                    break;
-                }
-            }
-            start++;
-            end--;
-        }
-        return ret;
-}
-*/
 
 bool is_palindrom(const string & word){
     int i1 = 0;
-    int i2 = word.length() - 1;
+    int i2 = word.size() - 1;
     while (i2 > i1) {
         if (word[i1] != word[i2]) {
             return false;
@@ -58,56 +33,113 @@ bool is_palindrom(const string & word){
     return true;
 }
 
-bool is_shuffled_palindrome(string s) {
+bool is_shuffled_palindrome(const string & s) {
     vector<int> occurrence(26, 0);
-    int oddCount = 0;
+    int odd_count = 0;
 
-    for(char i : s) occurrence[i - 'a']++;
-    for (int value : occurrence) if (value % 2 != 0) oddCount++;
-    return oddCount <= 1;
-}
-
-int solution(const string & inputStr)
-{
-    if(!is_shuffled_palindrome(inputStr)) { return -1; }
-
-    int n = inputStr.length();
-    int result = 0;
-    string items = inputStr;
-    for(int i = 0; i< n/2; i++)
-    {
-        bool found = false;
-        for(int j = n-i-1; j >= i+1; j--)
-        {
-            if (items[i] != items[j])
-                continue;
-            found = true;
-            for(int k = j; k < n - i - 1; k++)
-            {
-                char temp = items[k];
-                items[k] = items[k+1];
-                items[k+1] = temp;
-                result++;
-            }
-            break;
-        }
-        if(!found && n%2 == 1)
-        {
-            for(int k = i; k < n/2; k++)
-            {
-                char temp = items[k];
-                items[k] = items[k + 1];
-                items[k + 1] = temp;
-                result++;
-            }
+    for(char i : s) { occurrence[i - 'a']++; }
+    for (int value : occurrence) {
+        if (value % 2 != 0) {
+            odd_count++;
         }
     }
-    return result == 0 ? -1 : result;
+    return odd_count <= 1;
+}
+
+/*
+int solution(string s) {
+    int start = 0;
+    int end = s.size() - 1;
+    int result = 0;
+    while (start < end) {
+        // if we found different chars
+        if (s[start] != s[end]) {
+            int i = end; // make an additional iterator from the end
+
+            // move toward the start until we found the same char
+            while (i > start && s[i] != s[start]) { --i; }
+
+            // if we have not scanned whole string yet
+            if (i > start) {
+                // swap all chars from i to the end
+                while (i < end) {
+                    swap(s[i], s[i + 1]);
+                    result++;
+                    i++;
+                }
+            }
+                // if we scanned whole the string and found
+                // no one the same char swap char on the start with adjacent char
+                // it needs for case when the first char is not on it's right place
+                // all other parts of the algorithm don't process a char on the start
+                // we don't need to shrink the processing window here so we start
+                // a new iteration of the loop here.
+            else {
+                swap(s[start], s[start+1]);
+                result++;
+                continue;
+            }
+        }
+        // if s[start] == s[end] shrink the processing window
+        start++;
+        end--;
+    }
+    return result;
+}
+*/
+
+int solution(string s) {
+    int s_size = s.size();
+    int result = 0;
+    int start = 0, end = s_size - 1;
+
+    // if string is empty or it is not a palindrome return -1
+    if ((s_size == 0) || (!is_shuffled_palindrome(s))) {
+        return -1;
+    }
+
+    while (end > start) {
+        // if we found different chars
+        if (s[start] != s[end]) {
+            int i = end; // make an additional iterator from the end
+
+            // move toward the start until we found the same char
+            while (i > start && s[i] != s[start]) { --i; }
+
+            // if we scanned whole the string and found
+            // no one the same char swap char on the start with adjacent char
+            // it needs for case when the first char is not on it's right place
+            // all other parts of the algorithm don't process a char on the start
+            if (i == start) {
+                swap(s[start], s[start + 1]);
+                ++result;
+            }
+            // if the same character found swap all chars from i to the end
+            else {
+                while (i < end) {
+                    swap(s[i], s[i + 1]);
+                    ++result;
+                    ++i;
+                }
+                ++start; --end;
+            }
+        }
+        // if s[start] == s[end] shrink the processing window
+        else {
+            ++start; --end;
+        }
+    }
+    return result;
 }
 
 int main() {
 
-    cout << solution("ntain") << endl;
+//    cout << solution("ntain") << endl;
+    cout << solution("abcba") << endl;
+    cout << solution("ntaiain") << endl;
+    cout << solution("niaiatn") << endl;
+    cout << solution("damam") << endl;
+    cout << solution("mamad") << endl;
 
     return 0;
 }

@@ -6,46 +6,35 @@
 
 using namespace std;
 
-
-int solution(const vector<int>&A, const vector<int>&B, int N){
-    vector<int> mymap(N+1,0);
-    for(int i = 0 ; i < A.size() ; i++){
-        mymap[A[i]]++;
-        mymap[B[i]]++;
+int solution(const vector<int> &A, const vector<int> &B, int N) {
+    int roads_num = A.size(); // M
+    vector<int> cities(N + 1, 0);
+    // count number of roads to the pair of cities
+    for (int i = 0; i < roads_num; ++i) {
+        cities[A[i]]++;
+        cities[B[i]]++;
     }
-    int res = INT_MIN;
-    for(int i = 0 ; i < A.size() ; i++)
-        res = max(res,mymap[A[i]]+mymap[B[i]]-1);
-    return res;
+    int result = INT_MIN;
+    // Find maximum number of roads connected to the pair
+    // of cities except the road between these two cities
+    // because it was counted twice for each city.
+    for (int i = 0; i < roads_num; ++i) {
+        result = max(result, cities[A[i]] + cities[B[i]] - 1);
+    }
+    return result;
 }
-
-
-/*
-int solution(const vector<int>&A, const vector<int>&B, int N) {
-    int maxRank = 0;
-    int edgesLen = A.size();
-
-//    int[] edgesCount = new int[N + 1];
-    vector<int> edgesCount(N + 1, 0);
-
-    for(int i=0; i<edgesLen; i++){
-        edgesCount[A[i]] += 1;
-        edgesCount[B[i]] += 1;
-    }
-
-    for(int i=0; i<edgesLen; i++){
-        int localMax = edgesCount[A[i]] + edgesCount[B[i]] - 1;
-        maxRank = max(maxRank, localMax);
-    }
-
-    return maxRank;
-}
-*/
 
 
 int main() {
 
+    vector<int> a = { 1, 2, 3, 4, 5, 6, 3, 12, 11, 10, 9 };
+    vector<int> b = { 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8};
+    int n = 11;
+
+
     cout << "Result: " << solution({1, 2, 3, 3},{2, 3, 1, 4}, 4) << " expected: 4" << endl;
+
+    cout << "Result: " << solution(a,b, 12) << " expected: 7" << endl;
 
     return 0;
 }
