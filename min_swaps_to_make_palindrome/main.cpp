@@ -5,6 +5,21 @@
 using namespace std;
 
 /**
+ * General idea of the algorithm:
+ * palindrome has mirrored sides where letters on the same distance from the middle of the word are the same.
+ *
+ * 0. Check if given string is a shuffled palindrome. If no return -1.
+ *
+ * 1. We checking if the letters from both sides are the same stared from edges of the word toward the center
+ * If the check is OK for all letters we return 0 because it is a correct palindrome and we should move nothing.
+ *
+ * 2. If we meet different letters we trying to find the same letter going from the end to the beginning of the word
+ * 2.1. If we meet the same letter we shift it by swaps to it's right place and return to the phase 1
+ * 2.2. If we don't meed the same letter we swap the first letter with it's neighbour and return to the phase 1.
+ *
+ * 3. Count all swaps and return the number.
+ *
+ *
      * Algorithm:
      *     1. First check the given string is a jumbled/shuffled palindrome or not.
      *     2. Next have two pointers p1 at 0 and p2 at s.length - 1 and start iterating.
