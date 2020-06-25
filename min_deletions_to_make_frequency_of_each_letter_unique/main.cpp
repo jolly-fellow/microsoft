@@ -6,35 +6,59 @@
 
 using namespace std;
 
-int solution0(const string & s) {
-    if(s.size() < 2) { return 0; }
+int solution(const string & s) {
+    int s_size = s.size();
+    // the solution make sense only for strings longer than 2 chars.
+    if(s_size < 2) { return 0; }
+    // get number of letters in given alphabet
     const int CHARS_NUMBER = 'z'-'a';
     int count = 0, processed = 0;
+    // we will keep here number of occurrences of the letters
     vector<int> occurrences(CHARS_NUMBER, 0);
-    for(char c: s) {
-        if(isalpha(c)) {
-            occurrences[c-'a']++;
-        }
-    }
 
+    // count number of occurrences of the letters in given string
+    for(char c: s) { occurrences[c-'a']++; }
+
+    // sort the array of the occurrences
+    // on this stage we don't need to know which letter exactly has which number of occurrences
+    // because we need to find only number of letters to remove
+    // so the sorting and losing alphabet order of letters is not important
     std::sort(begin(occurrences), end(occurrences), std::greater<int>());
 
-    for (int i = 0; i < CHARS_NUMBER; ++i) {
+    // here we processing all numbers of occurrences
+    // since we need only count how many letters we need to remove
+    // we don't need to actually change numbers of occurrences themselves
+    // we just have to count letters to delete like we changed the occurrences
+    for (int i = 0; i < CHARS_NUMBER - 1; ++i) {
         processed += occurrences[i];
-        if(occurrences[i] <= 2) {
-            count += occurrences[i];
-        }
-        else {
-            if (occurrences[i] <= occurrences[i + 1]) {
-                ++count;
-                occurrences[i + 1] = occurrences[i] - 1;
+
+        switch (occurrences[i]) {
+            case 0:
+                // if we processed all letters just return the counter
+                return count;
+            case 2:
+                // of we met line with 2 occurrences we remove one letter to make a stair step
+                // from one letter so increase the counter
+                if(i == 0) { ++count; }
+            case 1:
+                // in case we met 1 or 2 occurrences we don't have to precess
+                // all other occurrences because we may calculate number of characters left to process
+                // if we subtract from length of given string number of processed chars + number of chars to remove
+                return s_size - (processed + count);
+            default: {
+                // if number of occurrences is greater than 2 check if the same as the next one
+                // if yes remove one letter to make a stair step and jump to the next step.
+                if (occurrences[i] <= occurrences[i + 1]) {
+                    ++count; ++i;
+                }
             }
         }
     }
     return count;
 }
 
-int solution(const string & s) {
+
+int solution0(const string & s) {
     int del = 0;
     vector<int> count('z'-'a', 0);
     for (char c: s) {
@@ -83,21 +107,11 @@ int solution2(const string & s){
 
 int main() {
 
-/*
- aaa
- ee
- b
- ff
- dd
- */
-
-    cout << "Result: " << solution0("aabbffddeaee") << " Expected: 6" << endl;
-/*
     cout << "Result: " << solution("eeeeffff") << " Expected: 1" << endl;
     cout << "Result: " << solution("aabbffddeaee") << " Expected: 6" << endl;
     cout << "Result: " << solution("llll") << " Expected: 0" << endl;
     cout << "Result: " << solution("example") << " Expected: 4" << endl;
-*/
+
     return 0;
 }
 
