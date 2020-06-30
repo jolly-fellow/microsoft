@@ -39,9 +39,9 @@ string solution(const string & s) {
 
 int main() {
 
-    cout << solution2("eedaaad") << endl;
-    cout << solution2("xxxtxxx") << endl;
-    cout << solution2("uuuuxaaaaxuuu") << endl;
+    cout << solution("eedaaad") << endl;
+    cout << solution("xxxtxxx") << endl;
+    cout << solution("uuuuxaaaaxuuu") << endl;
     return 0;
 }
 
