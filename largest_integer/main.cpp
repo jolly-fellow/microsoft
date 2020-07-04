@@ -6,13 +6,13 @@ using namespace std;
 
 int solution(const vector<int>& input){
     unordered_set<int> s(input.begin(),input.end());
-    int res = 0;
+    int max_value = 0;
     for(auto n : s){
-        if( (abs(n) > res) && (s.count(-n) != 0) ) {
-            res = n;
+        if((abs(n) > max_value) && (s.count(-n) != 0) ) {
+            max_value = n;
         }
     }
-    return res;
+    return max_value;
 }
 
 int main() {
