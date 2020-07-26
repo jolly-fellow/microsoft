@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 int solution(const vector<string>& v) {
     // We will keep in this vector bitmaps of used letters
     // for the processed words.
