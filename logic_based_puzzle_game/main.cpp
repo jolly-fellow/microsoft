@@ -5,13 +5,11 @@ using namespace std;
 
 void replace(string &s, int i) {
     int r;
-    char c;
+    char c = 'a';
     int s_len = s.length();
-    do {
-        r = rand()%26;
-        c = 'a' + r;
-    } while ((i > 0 && s[i-1] == c) || (i < s_len-1 && s[i+1] == c));
-
+    while (c <='z' && ((i > 0 && s[i-1] == c) || (i < s_len-1 && s[i+1] == c))) {
+        ++c;
+    }
     s[i] = c;
 }
 
