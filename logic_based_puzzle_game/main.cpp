@@ -26,11 +26,27 @@ string solution(string s) {
     return s;
 }
 
+string solution2(string s) {
+    int s_size = s.size();
+    for (int i = 0; i < s_size; ++i) {
+        if (s[i] == '?') {
+            for (char c = 'a'; c < 'd'; ++c) {
+                if ((i == 0 || c != s[i - 1]) && (i == s_size - 1 || c != s[i + 1])) {
+                    s[i] = c;
+                    break;
+                }
+            }
+        }
+    }
+    return s;
+}
+
+
 int main() {
 
-    cout << "Result: " << solution("xy?xz?") << " Expected: xycxza, xyzxzd, xyfxzf or similar" << endl;
-    cout << "Result: " << solution("ab?e?mr??") << " Expected: abveamrab or similar" << endl;
-    cout << "Result: " << solution("??????") << " Expected: any string with length 6 chars" << endl;
+    cout << "Result: " << solution2("xy?xz?") << " Expected: xycxza, xyzxzd, xyfxzf or similar" << endl;
+    cout << "Result: " << solution2("ab?e?mr??") << " Expected: abveamrab or similar" << endl;
+    cout << "Result: " << solution2("??????") << " Expected: any string with length 6 chars" << endl;
 
     return 0;
 }

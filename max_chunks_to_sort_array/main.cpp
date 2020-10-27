@@ -57,16 +57,19 @@ int solution1(vector<int> v) {
  we have an array which items are not guaranteed to be in range [0, size_of_array - 1].
  And they may have gaps.
  For this case we should use inverted algorithm - move from the back to the front of the array,
- track the minimum value and check if the array item is lower.
+ track the minimum value and check if the array item is lower. Track the minimum processed value.
+ If we meet a value lower than the minimum we should add one split point and set the current value as the minimum.
+ Because in process of sorting we should not swap current current value and minimum value it means they are already
+ in ascending order so we can split the array here.
  */
 int solution2(const vector<int> v) {
     int v_size = v.size();
     int count = 1, min_value = v[v_size - 1];
 
     int current = v[v_size - 1];
-    for(int i=v_size-2;i>=0;i--){
+    for (int i = v_size - 2; i >= 0; --i) {
         current = std::min(v[i], current);
-        if(current < min_value) {
+        if (current < min_value) {
             ++count;
             min_value = current;
         }

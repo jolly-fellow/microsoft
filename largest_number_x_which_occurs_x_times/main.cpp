@@ -3,9 +3,7 @@
 
 using namespace std;
 
-//Solution I came up with in C++ after taken into account the assumptions:
-
-// A.size() caps at 100,000, so largest answer possible for
+// v.size() caps at 100,000, so largest answer possible for
 // this is 100,000
 // values in array is from 1....100,000,000
 

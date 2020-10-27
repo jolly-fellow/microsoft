@@ -89,7 +89,7 @@ vector<int> get_char_indices(const string & s, char c) {
     return indices;
 }
 
-int solution(const string & s) {
+int solution2(const string & s) {
     auto reds = get_char_indices(s, 'R');
     int mid = reds.size() / 2;
     int min_swaps = 0, reds_num = reds.size();
@@ -101,11 +101,46 @@ int solution(const string & s) {
 }
 
 
+int solution(const string & s) {
+    int red_count = 0;
+    // count number of Rs in the string
+    for (char c : s) {
+        if (c == 'R') ++red_count;
+    }
+    // Init indexes to the ends of the string and the result
+    int left = 0, right = s.size() - 1, result = 0;
+    // moving from the ends to the middle
+    while (left < right) {
+        // if we meet pair of Rs on the ends
+        if (s[left] == 'R' && s[right] == 'R') {
+            // add the the result number of Ws between of these Rs
+            red_count -= 2;
+            result += right - left - 1 - red_count;
+            // and shrink the processing window
+            ++left;
+            --right;
+        }
+        // pass all Ws we meet
+        else if (s[left] != 'R') {
+            ++left;
+        }
+        else {
+            --right;
+        }
+    }
+    return result;
+}
+
+
+
+
 int main() {
 
     cout << solution("RRRWRR") << " Expected: 2" << endl;
     cout << solution("WRRWWR") << " Expected: 2" << endl;
     cout << solution("WWRWWWRWR") << " Expected: 4" << endl;
+    cout << solution("RWRWWRRR") << " Expected: 5" << endl;
+
 
     return 0;
 }

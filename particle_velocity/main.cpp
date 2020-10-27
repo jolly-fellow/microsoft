@@ -7,8 +7,7 @@ int solution(const vector<int> & v) {
     int total_periods = 0, v_size = v.size();
     for (int i = 0; i < v_size; i++) {
         for (int count = 0; i + 2 < v_size && v[i + 1] - v[i] == v[i + 2] - v[i + 1]; i++) {
-            count++;
-            total_periods += count;
+            total_periods += ++count;
         }
     }
     return total_periods < 1000000000 ? total_periods : -1;
