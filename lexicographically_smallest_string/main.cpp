@@ -31,6 +31,7 @@ string solution(const string &s) {
 
 int main() {
 
+    cout << "Result: " << solution("bba") << " Expected: ba" << endl;
     cout << "Result: " << solution("abczd") << " Expected: abcd" << endl;
     cout << "Result: " << solution("abcdz") << " Expected: abcd" << endl;
 
