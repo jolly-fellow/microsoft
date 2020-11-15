@@ -69,29 +69,6 @@ int KMP_count(const string &s, const string &sub) {
     return num_subs;
 }
 
-int BM_count(const string &s, const string &sub) {
-    int num_subs = 0;
-    size_t sub_size = sub.size();
-    size_t s_size = s.size();
-    if ((sub_size == 0) || (sub_size > s.size())) { return 0; }
-
-
-
-    std::string in = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,"
-                     " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
-    std::string needle = "pisci";
-    auto it = std::search(in.begin(), in.end(),
-                          std::boyer_moore_searcher(
-                                  needle.begin(), needle.end()));
-    if(it != in.end())
-        std::cout << "The string " << needle << " found at offset "
-                  << it - in.begin() << '\n';
-    else
-        std::cout << "The string " << needle << " not found\n";
-
-
-}
-
 
 // if overlapped is false then counts non overlapped substrings
 int count_substrings(const std::string & s, const std::string& sub, bool overlapped = true) {
@@ -119,7 +96,8 @@ string parser(const string & s) {
     for(char *token = strtok((char*)blobs.c_str(), "|"); token != NULL; token = strtok(NULL, "|")) {
         string stoken(token);
 //        int num_patterns = count_substrings(stoken, pattern);
-        int num_patterns = KMP_count(stoken, pattern); // z_count(stoken, pattern);
+//        int num_patterns = z_count(stoken, pattern);
+        int num_patterns = KMP_count(stoken, pattern);
         total_patterns += num_patterns;
         output.append(to_string(num_patterns));
         output.append("|");
