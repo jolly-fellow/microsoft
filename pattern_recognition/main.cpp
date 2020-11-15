@@ -89,7 +89,6 @@ string parser(const string & s) {
     int total_patterns = 0;
 
     size_t pos = s.find_first_of(';');
-
     string pattern = s.substr(0, pos);
     string blobs = s.substr(pos+1);
 
