@@ -1,96 +1,168 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
 #include <algorithm>
 #include <cstring>
-#include <unordered_set>
-#include <set>
 
 using namespace std;
 
-vector<string> get_top_keywords(const vector<string> & keywords, vector<string> & reviews, int k ) {
-    // This map will contains pairs of the keywords and their frequency of their appearance in the reviews
-    unordered_map<string, int> map_keys;
-    // Reserve buckets for all possible keywords to prevent rehash in process of work
-    // It allows to add all keywords in constant time.
-    map_keys.reserve(keywords.size());
-
-    // Fill the map with all keywords. Then we will use them to recognize in the text of the reviews
-    for(auto & key : keywords) {
-        map_keys.emplace(key, 0);
+vector<int> z_function (const string & s) {
+    int n = (int) s.size();
+    vector<int> z (n);
+    for (int i=1, l=0, r=0; i<n; ++i) {
+        if (i <= r)
+            z[i] = min (r-i+1, z[i-l]);
+        while (i+z[i] < n && s[z[i]] == s[i+z[i]])
+            ++z[i];
+        if (i+z[i]-1 > r)
+            l = i,  r = i+z[i]-1;
     }
+    return z;
+}
 
-    using key_counter = pair<string, int>;
+int z_count(const std::string & s, const std::string& sub) {
+    size_t sub_size = sub.size();
+    if ( (sub_size == 0) || (sub_size > s.size()) ) return 0;
 
-    // Write a custom comparator which allows to sort the keywords corresponding to the requirements of the task
-    auto comp = [](const key_counter & lhs, const key_counter & rhs) -> bool {
-        return lhs.second > rhs.second || (lhs.first < rhs.first && lhs.second == rhs.second);
-    };
+    string working_string(sub + s);
+    size_t ws_size = working_string.size();
 
-    // We will keep here properly sorted keywords.
-    set<key_counter, decltype(comp)> counter_set (comp);
+    auto z = z_function(working_string);
 
-    // Process the reviews one by one
-    for(string review : reviews) {
-        // transform each review to lower before processing
-        std::transform(review.begin(), review.end(), review.begin(),
-                       [](unsigned char c){ return std::tolower(c); });
-        // This set needs to keep all keywords from the review which were added to
-        // count each keyword only one time per review as the task requires
-        unordered_set<string> added;
-        // This is the most short and obvious way to break a string with many delimiters to tokens. C++ is weak here.
-        for(char *token = strtok((char*)review.c_str(), " .,;"); token != NULL; token = strtok(NULL, " .,;")) {
-            // If the token is a given keyword and this token was not counted for this review count it.
-            if(map_keys.count(token) && !added.count(token)) {
-                map_keys[token]++;
-                added.emplace(token);
-            }
+    int number_subs = 0;
+
+    for(int i = sub_size; i < ws_size; ++i) {
+        if (z[i] >= sub_size) {
+//            cout << i - sub_size << endl; //to get position of substrings in the string
+            ++number_subs;
         }
     }
-    // Easy and fast way to sort the keywords corresponding to the requirements of the task
-    for(auto& e: map_keys) { counter_set.emplace(e); }
+    return number_subs;
+}
 
-    // Take k sorted keywords and add return them as the result
-    vector<string> res;
-    for(auto& e: counter_set) {
-        if(k == 0) { break; }
-        res.push_back(e.first);
-        --k;
+
+int KMP_count(const string &s, const string &sub) {
+    int num_subs = 0;
+    size_t sub_size = sub.size();
+    size_t s_size = s.size();
+    if ((sub_size == 0) || (sub_size > s.size())) { return 0; }
+    vector<int> prefixes(sub_size);
+    for (int k = 0, i = 1; i < sub_size; ++i) {
+        while ((k > 0) && (sub[i] != sub[k])) {
+            k = prefixes[k - 1];
+        }
+        if (sub[i] == sub[k]) { k++; }
+        prefixes[i] = k;
     }
-    return res;
+
+    for (int k = 0, i = 0; i < s_size; ++i) {
+        while ((k > 0) && (sub[k] != s[i])) {
+            k = prefixes[k - 1];
+        }
+        if (sub[k] == s[i]) { k++; }
+
+        if (k == sub_size) {
+            // (i - sub_size + 1); //to get position of substrings in the string
+            ++num_subs;
+        }
+    }
+    return num_subs;
+}
+
+int BM_count(const string &s, const string &sub) {
+    int num_subs = 0;
+    size_t sub_size = sub.size();
+    size_t s_size = s.size();
+    if ((sub_size == 0) || (sub_size > s.size())) { return 0; }
+
+
+
+    std::string in = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,"
+                     " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
+    std::string needle = "pisci";
+    auto it = std::search(in.begin(), in.end(),
+                          std::boyer_moore_searcher(
+                                  needle.begin(), needle.end()));
+    if(it != in.end())
+        std::cout << "The string " << needle << " found at offset "
+                  << it - in.begin() << '\n';
+    else
+        std::cout << "The string " << needle << " not found\n";
+
+
+}
+
+
+// if overlapped is false then counts non overlapped substrings
+int count_substrings(const std::string & s, const std::string& sub, bool overlapped = true) {
+    size_t sub_size = sub.size();
+    if ( (sub_size == 0) || (sub_size > s.size()) ) return 0;
+    int count = 0;
+    for (size_t offset = s.find(sub); offset != string::npos;
+         offset = s.find(sub, overlapped ? offset + 1 : offset + sub.size()))
+
+    {
+        ++count;
+    }
+    return count;
+}
+
+string parser(const string & s) {
+    string output;
+    int total_patterns = 0;
+
+    size_t pos = s.find_first_of(';');
+
+    string pattern = s.substr(0, pos);
+    string blobs = s.substr(pos+1);
+
+    for(char *token = strtok((char*)blobs.c_str(), "|"); token != NULL; token = strtok(NULL, "|")) {
+        string stoken(token);
+//        int num_patterns = count_substrings(stoken, pattern);
+        int num_patterns = KMP_count(stoken, pattern); // z_count(stoken, pattern);
+        total_patterns += num_patterns;
+        output.append(to_string(num_patterns));
+        output.append("|");
+    }
+    output.append(to_string(total_patterns));
+    return output;
 }
 
 
 int main() {
-    int k1 = 2;
-    vector<string> keywords1 = { "anacell", "cetracular", "betacellular" };
-    vector<string> reviews1 = { "Anacell provides the best services in the city",
-                                "betacellular has awesome services",
-                                "Best services provided by anacell, everyone should use anacell"};
-    int k2 = 2;
-    vector<string> keywords2 = { "anacell", "betacellular", "cetracular", "deltacellular", "eurocell" };
-    vector<string> reviews2 = { "I love anacell Best services; Best services provided by anacell",
-                          "betacellular has great services",
-                          "deltacellular provides much better services than betacellular",
-                          "cetracular is worse than anacell",
-                          "Betacellular is better than deltacellular."};
 
-    std::cout << "test 1: " << std::endl;
+    /*
+Test 1
+Test Input
+bc;bcdefbcbebc|abcdebcfgsdf|cbdbesfbcy|1bcdef23423bc32
+Expected Output
+3|2|1|2|8
 
-    auto res = get_top_keywords(keywords1, reviews1, k1);
+Test 2
+Test Input
+aa;aaaakjlhaa|aaadsaaa|easaaad|sa
+Expected Output
+4|4|2|0|10
 
-    for(auto e: res) {
-        cout << e << endl;
-    }
+Test 3
+Test Input
+b;bcdefbcbebc|abcdebcfgsdf|cbdbesfbcy|1bcdef23423bc32
+Expected Output
+4|2|3|2|11
 
-    std::cout  << std::endl << "test 2: " << std::endl;
+Test 4
+Test Input
+;bcdefbcbebc|abcdebcfgsdf|cbdbesfbcy|1bcdef23423bc32
+Expected Output
+0|0|0|0|0
 
-    res = get_top_keywords(keywords2, reviews2, k2);
+     */
 
-    for(auto e: res) {
-        cout << e << endl;
-    }
+    cout << parser("bc;bcdefbcbebc|abcdebcfgsdf|cbdbesfbcy|1bcdef23423bc32") << " Expected: 3|2|1|2|8" << std::endl;
+    cout << parser("aa;aaaakjlhaa|aaadsaaa|easaaad|sa") << " Expected: 4|4|2|0|10" << std::endl;
+    cout << parser("b;bcdefbcbebc|abcdebcfgsdf|cbdbesfbcy|1bcdef23423bc32") << " Expected: 4|2|3|2|11" << std::endl;
+    cout << parser(";bcdefbcbebc|abcdebcfgsdf|cbdbesfbcy|1bcdef23423bc32") << " Expected: 0|0|0|0|0" << std::endl;
+
 
     return 0;
 }
