@@ -2,8 +2,6 @@
 
 https://leetcode.com/discuss/interview-question/414660/
 
-# ![alt text](https://assets.leetcode.com/users/krunal4/image_1573072367.png "Description")
-
 Example:
 
     Input: "RRRWRR"
