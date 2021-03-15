@@ -90,6 +90,26 @@ std::multimap<int, std::vector<int> > solution(const vector<int> & v, int n) {
     return m;
 }
 
+std::multimap<int, std::vector<int> > solution2(const vector<int> & v, int n) {
+    int v_size = v.size();
+    std::multimap<int, std::vector<int> > m;
+
+    for (int i = 0, j = v_size - 1; i < n; ++i, --j) {
+        m.emplace(v[j],vector<int>{v[j]});
+    }
+
+    for (int i = v_size - n - 1; i >= 0; --i) {
+
+        std::pair<int, std::vector<int> > tmp_pair = *(m.begin());
+        tmp_pair.second.push_back(v[i]);
+        tmp_pair.first += v[i];
+        m.erase(m.begin());
+        m.emplace(tmp_pair);
+    }
+    return m;
+}
+
+
 int main() {
 
 //    auto result = part({1,2,3,4,5}, 3);
@@ -98,7 +118,7 @@ int main() {
 
     cout  << endl << "Second solution:" << endl;
 
-    auto m = solution({1,2,3,4,5,6,7,8,9,10}, 3);
+    auto m = solution2({1,2,3,4,5,6,7,8, 9, 10}, 3);
     print_map(m);
 
     return 0;
